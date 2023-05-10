@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,14 +13,7 @@ int solution(vector<int> priorities, int location) {
 		int nowNum = 0;
 		int popIndex = 0;
 
-		for (auto i = 0; i < priorities.size(); i++)
-		{
-			if (priorities[i] > nowNum)
-			{
-				nowNum = priorities[i];
-				popIndex = i;
-			}
-		}
+		popIndex = max_element(priorities.begin(), priorities.end()) - priorities.begin();
 
 		if (location == popIndex)
 		{
@@ -30,37 +24,25 @@ int solution(vector<int> priorities, int location) {
 			answer++;
 		}
 
-		if (popIndex > 0)
+		for (auto i = 0; i <= popIndex; i++)
 		{
-			for (auto i = 0; i <= popIndex; i++)
+			if (i == popIndex)
 			{
-				if (i == popIndex)
-				{
-					priorities.erase(priorities.begin());
-				}
-				else
-				{
-					int popNum = priorities.front();
-					priorities.erase(priorities.begin());
-					priorities.push_back(popNum);
-				}
-				location--;
-				if (location < 0)
-				{
-					location = priorities.size() - 1;
-				}
+				priorities.erase(priorities.begin());
 			}
-		}
-		else
-		{
-			priorities.erase(priorities.begin());
+			else
+			{
+				int popNum = priorities.front();
+				priorities.erase(priorities.begin());
+				priorities.push_back(popNum);
+			}
 			location--;
 			if (location < 0)
 			{
 				location = priorities.size() - 1;
 			}
 		}
-		
+
 	}
     return answer;
 }
